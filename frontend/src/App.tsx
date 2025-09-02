@@ -26,15 +26,22 @@ export default function App() {
   }, []);
 
   async function handleCreate(e: React.FormEvent) {
-    e.preventDefault();
-    if (!title.trim() || !content.trim()) return;
-    setLoading(true);
+  e.preventDefault();
+  if (!title.trim() || !content.trim()) return;
+
+  setLoading(true);
+  try {
     await createNote(title.trim(), content.trim());
     setTitle("");
     setContent("");
-    setLoading(false);
-    refresh();
+    await refresh(); // make sure new note shows immediately
+  } catch (err) {
+    console.error("Error creating note:", err);
+    alert("Failed to add note. Please try again.");
+  } finally {
+    setLoading(false); 
   }
+}
 
   async function handleDelete(id: number) {
     await deleteNote(id);
