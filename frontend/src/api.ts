@@ -12,8 +12,15 @@ export async function createNote(title: string, content: string) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ title, content }),
   });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(`Failed to create note: ${res.status} ${errorText}`);
+  }
+
   return res.json();
 }
+
 
 export async function deleteNote(id: number) {
   await fetch(`${API_URL}/notes/${id}`, { method: "DELETE" });
