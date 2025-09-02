@@ -11,6 +11,7 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 # Allow frontend to connect
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],  # React dev server
@@ -18,7 +19,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+@app.get("/")
+def root():
+    return {"message": "Notes API is live 🚀"}
 # Dependency
 def get_db():
     db = SessionLocal()
